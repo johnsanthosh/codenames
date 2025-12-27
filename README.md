@@ -2,6 +2,24 @@
 
 Online multiplayer Codenames game built with React, TypeScript, Firebase, and Tailwind CSS.
 
+## Screenshots
+
+<p align="center">
+  <img src="screenshots/home.png" alt="Home Page" width="45%" />
+  <img src="screenshots/lobby.png" alt="Game Lobby" width="45%" />
+</p>
+<p align="center">
+  <img src="screenshots/game.png" alt="Game Board" width="45%" />
+  <img src="screenshots/admin.png" alt="Admin Dashboard" width="45%" />
+</p>
+
+| Screenshot | Description |
+|------------|-------------|
+| **Home** | Create a new game or join with a room code |
+| **Lobby** | Select your team (Red/Blue) and role (Spymaster/Operative) |
+| **Game** | The main game board with spymaster view showing card colors |
+| **Admin** | Admin dashboard to manage rooms, players, and game state |
+
 ## Features
 
 - **Real-time multiplayer** - Play with friends in real-time using Firebase
