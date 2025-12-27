@@ -1,0 +1,103 @@
+export const WORD_LIST: string[] = [
+  // Nature
+  'TREE', 'FOREST', 'MOUNTAIN', 'RIVER', 'OCEAN', 'DESERT', 'JUNGLE', 'ISLAND',
+  'BEACH', 'STORM', 'THUNDER', 'LIGHTNING', 'RAIN', 'SNOW', 'ICE', 'FIRE',
+  'VOLCANO', 'EARTHQUAKE', 'WAVE', 'WIND', 'SUN', 'MOON', 'STAR', 'PLANET',
+
+  // Animals
+  'LION', 'TIGER', 'BEAR', 'WOLF', 'EAGLE', 'SHARK', 'WHALE', 'DOLPHIN',
+  'ELEPHANT', 'GIRAFFE', 'MONKEY', 'SNAKE', 'SPIDER', 'BAT', 'OWL', 'HAWK',
+  'HORSE', 'DOG', 'CAT', 'MOUSE', 'RABBIT', 'FOX', 'DEER', 'CROW',
+
+  // Food & Drink
+  'APPLE', 'ORANGE', 'BANANA', 'GRAPE', 'LEMON', 'BERRY', 'CHERRY', 'PEACH',
+  'BREAD', 'CAKE', 'PIE', 'COOKIE', 'CHOCOLATE', 'CANDY', 'HONEY', 'SUGAR',
+  'COFFEE', 'TEA', 'MILK', 'WINE', 'BEER', 'WATER', 'JUICE', 'SODA',
+
+  // Objects
+  'BOOK', 'PEN', 'PAPER', 'DESK', 'CHAIR', 'TABLE', 'LAMP', 'CLOCK',
+  'PHONE', 'COMPUTER', 'SCREEN', 'KEYBOARD', 'MOUSE', 'CAMERA', 'MIRROR', 'GLASS',
+  'KEY', 'LOCK', 'DOOR', 'WINDOW', 'WALL', 'FLOOR', 'ROOF', 'BRIDGE',
+
+  // Places
+  'HOUSE', 'CASTLE', 'TOWER', 'TEMPLE', 'CHURCH', 'SCHOOL', 'HOSPITAL', 'BANK',
+  'STORE', 'MARKET', 'RESTAURANT', 'HOTEL', 'AIRPORT', 'STATION', 'PORT', 'PARK',
+  'GARDEN', 'FARM', 'FACTORY', 'OFFICE', 'LIBRARY', 'MUSEUM', 'THEATER', 'STADIUM',
+
+  // Actions
+  'RUN', 'JUMP', 'SWIM', 'FLY', 'CLIMB', 'DANCE', 'SING', 'PLAY',
+  'FIGHT', 'HUNT', 'CHASE', 'HIDE', 'SEEK', 'FIND', 'LOSE', 'WIN',
+  'BREAK', 'BUILD', 'CREATE', 'DESTROY', 'OPEN', 'CLOSE', 'PUSH', 'PULL',
+
+  // Professions
+  'DOCTOR', 'NURSE', 'TEACHER', 'LAWYER', 'JUDGE', 'POLICE', 'SOLDIER', 'PILOT',
+  'CHEF', 'ARTIST', 'ACTOR', 'SINGER', 'WRITER', 'SCIENTIST', 'ENGINEER', 'FARMER',
+  'SAILOR', 'CAPTAIN', 'KING', 'QUEEN', 'PRINCE', 'KNIGHT', 'WIZARD', 'WITCH',
+
+  // Body Parts
+  'HEAD', 'FACE', 'EYE', 'NOSE', 'MOUTH', 'EAR', 'HAND', 'FOOT',
+  'ARM', 'LEG', 'HEART', 'BRAIN', 'BONE', 'BLOOD', 'SKIN', 'HAIR',
+
+  // Clothing
+  'HAT', 'CAP', 'SHIRT', 'PANTS', 'DRESS', 'COAT', 'JACKET', 'SHOE',
+  'BOOT', 'GLOVE', 'SCARF', 'TIE', 'BELT', 'RING', 'CROWN', 'MASK',
+
+  // Vehicles
+  'CAR', 'TRUCK', 'BUS', 'TRAIN', 'PLANE', 'SHIP', 'BOAT', 'ROCKET',
+  'BIKE', 'MOTORCYCLE', 'HELICOPTER', 'SUBMARINE', 'TANK', 'WAGON', 'SLED', 'CART',
+
+  // Weapons & Tools
+  'SWORD', 'KNIFE', 'GUN', 'ARROW', 'BOW', 'SHIELD', 'HAMMER', 'AXE',
+  'SAW', 'DRILL', 'WRENCH', 'NEEDLE', 'ROPE', 'CHAIN', 'WHIP', 'HOOK',
+
+  // Sports & Games
+  'BALL', 'BAT', 'GOAL', 'NET', 'RACE', 'GAME', 'MATCH', 'SCORE',
+  'CARD', 'DICE', 'CHESS', 'POOL', 'GOLF', 'TENNIS', 'HOCKEY', 'BOXING',
+
+  // Music
+  'DRUM', 'GUITAR', 'PIANO', 'VIOLIN', 'TRUMPET', 'FLUTE', 'BELL', 'HORN',
+  'SONG', 'MUSIC', 'BAND', 'CONCERT', 'OPERA', 'JAZZ', 'ROCK', 'BEAT',
+
+  // Time & Space
+  'DAY', 'NIGHT', 'MORNING', 'EVENING', 'HOUR', 'MINUTE', 'SECOND', 'YEAR',
+  'PAST', 'FUTURE', 'PRESENT', 'SPACE', 'TIME', 'SPEED', 'LIGHT', 'DARK',
+
+  // Abstract Concepts
+  'LOVE', 'HATE', 'FEAR', 'HOPE', 'DREAM', 'MEMORY', 'THOUGHT', 'IDEA',
+  'POWER', 'FORCE', 'ENERGY', 'MAGIC', 'SPELL', 'CURSE', 'LUCK', 'FATE',
+  'PEACE', 'WAR', 'BATTLE', 'VICTORY', 'DEFEAT', 'HONOR', 'GLORY', 'FAME',
+
+  // Materials
+  'GOLD', 'SILVER', 'IRON', 'STEEL', 'COPPER', 'BRONZE', 'DIAMOND', 'RUBY',
+  'WOOD', 'STONE', 'ROCK', 'SAND', 'CLAY', 'GLASS', 'PLASTIC', 'RUBBER',
+
+  // Weather & Elements
+  'CLOUD', 'FOG', 'MIST', 'FROST', 'HEAT', 'COLD', 'WARM', 'COOL',
+  'EARTH', 'AIR', 'FLAME', 'SMOKE', 'ASH', 'DUST', 'MUD', 'RUST',
+
+  // Colors
+  'RED', 'BLUE', 'GREEN', 'YELLOW', 'ORANGE', 'PURPLE', 'PINK', 'BLACK',
+  'WHITE', 'GRAY', 'BROWN', 'GOLD', 'SILVER', 'BRONZE', 'CREAM', 'OLIVE',
+
+  // Miscellaneous
+  'GHOST', 'ZOMBIE', 'VAMPIRE', 'MONSTER', 'DRAGON', 'GIANT', 'DWARF', 'ELF',
+  'ANGEL', 'DEMON', 'GOD', 'DEVIL', 'SPIRIT', 'SOUL', 'SHADOW', 'ECHO',
+  'SECRET', 'MYSTERY', 'PUZZLE', 'RIDDLE', 'TRICK', 'TRAP', 'MAZE', 'CODE',
+  'SIGN', 'SYMBOL', 'FLAG', 'MARK', 'BRAND', 'SEAL', 'STAMP', 'LABEL',
+  'GIFT', 'PRIZE', 'REWARD', 'TREASURE', 'GOLD', 'JEWEL', 'GEM', 'PEARL',
+  'STORY', 'TALE', 'LEGEND', 'MYTH', 'FABLE', 'POEM', 'SONG', 'SCRIPT',
+  'PICTURE', 'PHOTO', 'PAINTING', 'DRAWING', 'SKETCH', 'MAP', 'CHART', 'GRAPH',
+  'LETTER', 'WORD', 'NAME', 'TITLE', 'NUMBER', 'ZERO', 'MILLION', 'BILLION',
+  'CENTER', 'EDGE', 'CORNER', 'SIDE', 'TOP', 'BOTTOM', 'FRONT', 'BACK',
+  'NORTH', 'SOUTH', 'EAST', 'WEST', 'LEFT', 'RIGHT', 'UP', 'DOWN',
+
+  // Technology
+  'ROBOT', 'MACHINE', 'ENGINE', 'MOTOR', 'WIRE', 'CABLE', 'CHIP', 'CIRCUIT',
+  'NETWORK', 'SYSTEM', 'PROGRAM', 'DATA', 'FILE', 'DISK', 'DRIVE', 'MEMORY',
+
+  // Additional Words
+  'CROWN', 'THRONE', 'PALACE', 'KINGDOM', 'EMPIRE', 'NATION', 'COUNTRY', 'STATE',
+  'CITY', 'TOWN', 'VILLAGE', 'STREET', 'ROAD', 'PATH', 'TRAIL', 'TRACK',
+  'BORDER', 'LINE', 'POINT', 'DOT', 'SPOT', 'AREA', 'ZONE', 'FIELD',
+  'SPRING', 'SUMMER', 'FALL', 'WINTER', 'SEASON', 'WEATHER', 'CLIMATE', 'NATURE',
+];

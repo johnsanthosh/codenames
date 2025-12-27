@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+@theme {
+  /* Team Colors */
+  --color-red-team: #DC2626;
+  --color-red-light: #FEE2E2;
+  --color-red-hover: #B91C1C;
+
+  --color-blue-team: #2563EB;
+  --color-blue-light: #DBEAFE;
+  --color-blue-hover: #1D4ED8;
+
+  /* Game Colors */
+  --color-neutral-card: #D4A574;
+  --color-assassin: #1F2937;
+
+  /* Background */
+  --color-background: #F8FAFC;
+  --color-surface: #FFFFFF;
+
+  /* Fonts */
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Base Styles */
+body {
+  @apply bg-background min-h-screen font-sans antialiased;
+  margin: 0;
+}
+
+#root {
+  @apply min-h-screen;
+}
