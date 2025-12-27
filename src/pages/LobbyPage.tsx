@@ -5,6 +5,7 @@ import { db } from '../lib/firebase';
 import { useAuth } from '../contexts/AuthContext';
 import { generateBoard, getRandomStartingTeam } from '../utils/generateBoard';
 import { cn } from '../utils/cn';
+import { motion } from 'framer-motion';
 import type { Room, Team, Role, GameState } from '../types';
 
 export function LobbyPage() {
@@ -25,7 +26,6 @@ export function LobbyPage() {
         const roomData = snapshot.val() as Room;
         setRoom(roomData);
 
-        // Redirect to game if already playing
         if (roomData.status === 'playing' && roomData.game) {
           navigate(`/room/${roomCode}/play`);
         }
@@ -48,7 +48,6 @@ export function LobbyPage() {
     const updates: Record<string, unknown> = {};
     const roomTeams = room.teams || { red: { spymaster: null, operatives: [] }, blue: { spymaster: null, operatives: [] } };
 
-    // Remove from current team
     if (currentTeam) {
       const currentTeamData = roomTeams[currentTeam] || { spymaster: null, operatives: [] };
       if (currentTeamData.spymaster === user.uid) {
@@ -61,7 +60,6 @@ export function LobbyPage() {
       }
     }
 
-    // Add to new team as operative by default
     const targetTeamData = roomTeams[team] || { spymaster: null, operatives: [] };
     const newOperatives = [...(targetTeamData.operatives || [])];
     if (!newOperatives.includes(user.uid)) {
@@ -83,19 +81,16 @@ export function LobbyPage() {
     const teamData = roomTeams[team] || { spymaster: null, operatives: [] };
 
     if (role === 'spymaster') {
-      // Check if spymaster slot is taken
       if (teamData.spymaster && teamData.spymaster !== user.uid) {
-        return; // Slot taken
+        return;
       }
 
-      // Remove from operatives
       const newOperatives = (teamData.operatives || []).filter(
         (id) => id !== user.uid
       );
       updates[`rooms/${roomCode}/teams/${team}/operatives`] = newOperatives;
       updates[`rooms/${roomCode}/teams/${team}/spymaster`] = user.uid;
     } else {
-      // Moving to operative
       if (teamData.spymaster === user.uid) {
         updates[`rooms/${roomCode}/teams/${team}/spymaster`] = null;
       }
@@ -115,7 +110,6 @@ export function LobbyPage() {
 
     const roomTeams = room.teams || { red: { spymaster: null, operatives: [] }, blue: { spymaster: null, operatives: [] } };
 
-    // Validate both teams have spymasters
     if (!roomTeams.red?.spymaster || !roomTeams.blue?.spymaster) {
       return;
     }
@@ -158,21 +152,24 @@ export function LobbyPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-team" />
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+          className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full"
+        />
       </div>
     );
   }
 
   if (!room) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <p className="text-gray-600">Room not found</p>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        <p className="text-slate-400">Room not found</p>
       </div>
     );
   }
 
-  // Ensure teams structure exists (Firebase may not store empty objects)
   const teams = room.teams || {
     red: { spymaster: null, operatives: [] },
     blue: { spymaster: null, operatives: [] },
@@ -199,80 +196,104 @@ export function LobbyPage() {
     const operatives = teamPlayers.filter((p) => p.role === 'operative');
     const isMyTeam = currentPlayer?.team === team;
 
+    const teamColor = team === 'red' ? {
+      bg: 'from-red-500/20 to-red-600/10',
+      border: 'border-red-500/30',
+      accent: 'text-red-400',
+      button: 'from-red-500 to-red-600',
+      shadow: 'shadow-red-500/25',
+      ring: 'ring-red-500',
+    } : {
+      bg: 'from-blue-500/20 to-blue-600/10',
+      border: 'border-blue-500/30',
+      accent: 'text-blue-400',
+      button: 'from-blue-500 to-blue-600',
+      shadow: 'shadow-blue-500/25',
+      ring: 'ring-blue-500',
+    };
+
     return (
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: team === 'red' ? 0.1 : 0.2 }}
         className={cn(
-          'bg-white rounded-2xl shadow-lg overflow-hidden',
-          team === 'red' ? 'border-t-4 border-red-team' : 'border-t-4 border-blue-team'
+          'backdrop-blur-xl rounded-3xl overflow-hidden border',
+          `bg-gradient-to-br ${teamColor.bg}`,
+          teamColor.border
         )}
       >
-        <div
-          className={cn(
-            'px-6 py-4',
-            team === 'red' ? 'bg-red-light' : 'bg-blue-light'
-          )}
-        >
-          <h2
-            className={cn(
-              'text-xl font-bold',
-              team === 'red' ? 'text-red-team' : 'text-blue-team'
-            )}
-          >
-            {team === 'red' ? 'Red Team' : 'Blue Team'}
+        <div className={cn(
+          'px-6 py-4 border-b',
+          teamColor.border
+        )}>
+          <h2 className={cn('text-2xl font-bold', teamColor.accent)}>
+            {team === 'red' ? '🔴 Red Team' : '🔵 Blue Team'}
           </h2>
         </div>
 
         <div className="p-6 space-y-6">
           {/* Spymaster Section */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-              Spymaster
+            <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wide mb-3 flex items-center gap-2">
+              🕵️ Spymaster
             </h3>
             {spymaster ? (
-              <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-center gap-3 p-4 bg-white/5 rounded-xl border border-white/10">
                 {spymaster.photoURL && (
                   <img
                     src={spymaster.photoURL}
                     alt={spymaster.name}
-                    className="w-10 h-10 rounded-full"
+                    className={cn('w-12 h-12 rounded-full ring-2', teamColor.ring)}
                   />
                 )}
-                <span className="font-medium text-gray-900">
-                  {spymaster.name}
-                  {spymaster.id === user?.uid && ' (You)'}
-                </span>
+                <div>
+                  <span className="font-medium text-white">
+                    {spymaster.name}
+                  </span>
+                  {spymaster.id === user?.uid && (
+                    <span className="ml-2 text-xs bg-white/10 px-2 py-0.5 rounded-full text-slate-300">You</span>
+                  )}
+                </div>
               </div>
             ) : (
-              <div className="p-3 border-2 border-dashed border-gray-200 rounded-lg text-gray-400 text-center">
+              <div className="p-4 border-2 border-dashed border-white/10 rounded-xl text-slate-500 text-center flex items-center justify-center gap-2">
+                <motion.span
+                  animate={{ rotate: [0, 180, 180, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  className="inline-block"
+                >
+                  ⏳
+                </motion.span>
                 Waiting for spymaster...
               </div>
             )}
             {isMyTeam && currentPlayer?.role !== 'spymaster' && !spymaster && (
-              <button
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => selectRole('spymaster')}
                 className={cn(
-                  'mt-2 w-full py-2 px-4 rounded-lg font-medium text-white transition-colors',
-                  team === 'red'
-                    ? 'bg-red-team hover:bg-red-hover'
-                    : 'bg-blue-team hover:bg-blue-hover'
+                  'mt-3 w-full py-3 px-4 rounded-xl font-medium text-white cursor-pointer',
+                  `bg-gradient-to-r ${teamColor.button} shadow-lg ${teamColor.shadow}`
                 )}
               >
                 Become Spymaster
-              </button>
+              </motion.button>
             )}
           </div>
 
           {/* Operatives Section */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-              Operatives
+            <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wide mb-3 flex items-center gap-2">
+              🔍 Operatives
             </h3>
             {operatives.length > 0 ? (
               <div className="space-y-2">
                 {operatives.map((op) => (
                   <div
                     key={op.id}
-                    className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
+                    className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/10"
                   >
                     {op.photoURL && (
                       <img
@@ -281,66 +302,81 @@ export function LobbyPage() {
                         className="w-10 h-10 rounded-full"
                       />
                     )}
-                    <span className="font-medium text-gray-900">
+                    <span className="font-medium text-white">
                       {op.name}
-                      {op.id === user?.uid && ' (You)'}
+                      {op.id === user?.uid && (
+                        <span className="ml-2 text-xs bg-white/10 px-2 py-0.5 rounded-full text-slate-300">You</span>
+                      )}
                     </span>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="p-3 border-2 border-dashed border-gray-200 rounded-lg text-gray-400 text-center">
+              <div className="p-3 border-2 border-dashed border-white/10 rounded-xl text-slate-500 text-center">
                 No operatives yet
               </div>
             )}
             {isMyTeam && currentPlayer?.role === 'spymaster' && (
-              <button
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => selectRole('operative')}
-                className="mt-2 w-full py-2 px-4 rounded-lg font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
+                className="mt-3 w-full py-2 px-4 rounded-xl font-medium bg-white/10 text-white hover:bg-white/20 transition-colors cursor-pointer"
               >
                 Switch to Operative
-              </button>
+              </motion.button>
             )}
           </div>
 
           {/* Join Team Button */}
           {!isMyTeam && (
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => joinTeam(team)}
               className={cn(
-                'w-full py-3 px-4 rounded-xl font-semibold text-white transition-colors',
-                team === 'red'
-                  ? 'bg-red-team hover:bg-red-hover'
-                  : 'bg-blue-team hover:bg-blue-hover'
+                'w-full py-4 px-4 rounded-xl font-semibold text-white cursor-pointer',
+                `bg-gradient-to-r ${teamColor.button} shadow-lg ${teamColor.shadow}`
               )}
             >
               Join {team === 'red' ? 'Red' : 'Blue'} Team
-            </button>
+            </motion.button>
           )}
         </div>
-      </div>
+      </motion.div>
     );
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      {/* Background */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-red-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+      </div>
+
       {/* Header */}
-      <header className="bg-white shadow-sm">
+      <header className="relative backdrop-blur-md bg-slate-900/50 border-b border-white/10">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">Game Lobby</h1>
+          <div className="flex items-center gap-3">
+            <img src="/logo.png" alt="Codenames" className="w-10 h-10 rounded-lg" />
+            <h1 className="text-2xl font-bold text-white">Game Lobby</h1>
+          </div>
           <div className="flex items-center gap-4">
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={copyRoomCode}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-xl hover:bg-white/20 transition-colors border border-white/10 cursor-pointer"
             >
-              <span className="font-mono font-bold text-lg">{roomCode}</span>
-              <span className="text-sm text-gray-500">
-                {copied ? 'Copied!' : 'Copy'}
+              <span className="font-mono font-bold text-lg text-white">{roomCode}</span>
+              <span className="text-sm text-slate-400">
+                {copied ? '✓ Copied!' : 'Copy'}
               </span>
-            </button>
+            </motion.button>
             <button
               onClick={leaveRoom}
-              className="px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+              className="px-4 py-2 text-slate-400 hover:text-white transition-colors cursor-pointer"
             >
               Leave
             </button>
@@ -349,16 +385,20 @@ export function LobbyPage() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-4 py-8">
+      <main className="relative max-w-6xl mx-auto px-4 py-8">
         {/* Room Code Display */}
-        <div className="text-center mb-8">
-          <p className="text-gray-600 mb-2">Share this code with your friends:</p>
-          <div className="inline-flex items-center gap-2 px-6 py-3 bg-white rounded-xl shadow-lg">
-            <span className="font-mono font-bold text-3xl tracking-widest">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-8"
+        >
+          <p className="text-slate-400 mb-3">Share this code with your friends</p>
+          <div className="inline-flex items-center gap-3 px-8 py-4 backdrop-blur-xl bg-white/5 rounded-2xl border border-white/10">
+            <span className="font-mono font-black text-4xl tracking-[0.3em] text-white">
               {roomCode}
             </span>
           </div>
-        </div>
+        </motion.div>
 
         {/* Team Panels */}
         <div className="grid md:grid-cols-2 gap-8 mb-8">
@@ -367,42 +407,62 @@ export function LobbyPage() {
         </div>
 
         {/* Start Game Button */}
-        {isHost && (
-          <div className="text-center">
-            <button
-              onClick={startGame}
-              disabled={!canStart || isStarting}
-              className={cn(
-                'px-8 py-4 rounded-xl font-bold text-xl text-white transition-all duration-200',
-                'bg-gradient-to-r from-red-team to-blue-team',
-                'hover:shadow-lg hover:scale-105',
-                'disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100'
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="text-center"
+        >
+          {isHost && (
+            <>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={startGame}
+                disabled={!canStart || isStarting}
+                className={cn(
+                  'px-12 py-5 rounded-2xl font-bold text-xl text-white cursor-pointer',
+                  'bg-gradient-to-r from-red-500 via-purple-500 to-blue-500',
+                  'shadow-xl shadow-purple-500/25',
+                  'disabled:opacity-50 disabled:cursor-not-allowed'
+                )}
+              >
+                {isStarting ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <motion.span
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                      className="w-6 h-6 border-2 border-white border-t-transparent rounded-full"
+                    />
+                    Starting...
+                  </span>
+                ) : (
+                  '🚀 Start Game'
+                )}
+              </motion.button>
+              {!canStart && (
+                <p className="mt-4 text-slate-400">
+                  Both teams need a spymaster and at least one operative total
+                </p>
               )}
-            >
-              {isStarting ? (
-                <span className="flex items-center justify-center gap-2">
-                  <span className="animate-spin rounded-full h-6 w-6 border-b-2 border-white" />
-                  Starting...
-                </span>
-              ) : (
-                'Start Game'
-              )}
-            </button>
-            {!canStart && (
-              <p className="mt-3 text-gray-500">
-                Both teams need a spymaster and at least one operative total
-              </p>
-            )}
-          </div>
-        )}
+            </>
+          )}
 
-        {!isHost && (
-          <div className="text-center">
-            <p className="text-gray-600">
-              Waiting for the host to start the game...
-            </p>
-          </div>
-        )}
+          {!isHost && (
+            <div className="backdrop-blur-xl bg-white/5 rounded-2xl px-8 py-6 inline-block border border-white/10">
+              <p className="text-slate-300 flex items-center gap-2">
+                <motion.span
+                  animate={{ rotate: [0, 180, 180, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  className="inline-block"
+                >
+                  ⏳
+                </motion.span>
+                Waiting for the host to start the game...
+              </p>
+            </div>
+          )}
+        </motion.div>
       </main>
     </div>
   );
