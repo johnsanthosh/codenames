@@ -123,7 +123,7 @@ export function HomePage() {
       <header className="relative backdrop-blur-md bg-slate-900/50 border-b border-white/10">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="Codenames" className="w-10 h-10 rounded-lg" />
+            <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Codenames" className="w-10 h-10 rounded-lg" />
             <h1 className="text-2xl font-bold text-white">CODENAMES</h1>
           </div>
           <div className="flex items-center gap-4">

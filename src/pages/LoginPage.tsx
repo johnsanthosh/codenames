@@ -68,7 +68,7 @@ export function LoginPage() {
             className="flex justify-center mb-8"
           >
             <img
-              src="/logo.png"
+              src={`${import.meta.env.BASE_URL}logo.png`}
               alt="Codenames"
               className="w-32 h-32 rounded-2xl shadow-2xl shadow-blue-500/20"
             />

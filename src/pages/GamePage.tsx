@@ -329,7 +329,7 @@ export function GamePage() {
       <header className="relative backdrop-blur-md bg-slate-900/50 border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <img src="/logo.png" alt="Codenames" className="w-8 h-8 rounded-lg" />
+            <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Codenames" className="w-8 h-8 rounded-lg" />
             <span className="font-mono text-slate-400 bg-slate-800 px-3 py-1 rounded-lg">{roomCode}</span>
           </div>
 

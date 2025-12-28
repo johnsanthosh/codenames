@@ -9,6 +9,7 @@ import { AdminPage } from './pages/AdminPage';
 
 function App() {
   return (
+    // <BrowserRouter basename="/games/codenames">
     <BrowserRouter>
       <AuthProvider>
         <Routes>
