@@ -7,9 +7,10 @@ import { LobbyPage } from './pages/LobbyPage';
 import { GamePage } from './pages/GamePage';
 import { AdminPage } from './pages/AdminPage';
 
+// <BrowserRouter basename="/games/codenames"></BrowserRouter>
+
 function App() {
   return (
-    // <BrowserRouter basename="/games/codenames">
     <BrowserRouter>
       <AuthProvider>
         <Routes>
