@@ -419,7 +419,7 @@ export function GamePage() {
             </AnimatePresence>
 
             {/* Board Grid */}
-            <div className="grid grid-cols-5 gap-3">
+            <div className="grid grid-cols-5 gap-1.5 sm:gap-2 md:gap-3">
               {game.board.map((card, index) => (
                 <motion.button
                   key={card.id}
@@ -431,7 +431,7 @@ export function GamePage() {
                   onClick={() => guessCard(index)}
                   disabled={!canGuess || card.revealed}
                   className={cn(
-                    'aspect-[4/3] rounded-xl font-bold text-sm md:text-base transition-all duration-300',
+                    'aspect-[4/3] rounded-lg sm:rounded-xl font-bold text-[10px] sm:text-xs md:text-base transition-all duration-300',
                     'border border-white/10',
                     getCardStyles(card),
                     canGuess && !card.revealed ? 'cursor-pointer hover:ring-2 hover:ring-white/50' : 'cursor-not-allowed opacity-90'
@@ -440,7 +440,7 @@ export function GamePage() {
                   {/* Spymaster corner indicator */}
                   {isSpymaster && !card.revealed && (
                     <div className={cn(
-                      "absolute top-1 right-1 w-6 h-6 rounded-md flex items-center justify-center text-xs font-bold",
+                      "absolute top-0.5 right-0.5 sm:top-1 sm:right-1 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 rounded sm:rounded-md flex items-center justify-center text-[8px] sm:text-[10px] md:text-xs font-bold",
                       card.type === 'red' && 'bg-red-500 text-white',
                       card.type === 'blue' && 'bg-blue-500 text-white',
                       card.type === 'neutral' && 'bg-amber-500 text-white',
@@ -453,7 +453,7 @@ export function GamePage() {
                     </div>
                   )}
                   <span className={cn(
-                    "relative z-10 break-words leading-tight px-2",
+                    "relative z-10 break-words leading-tight px-0.5 sm:px-1 md:px-2",
                     getTextColor(card),
                     card.revealed && card.type === 'assassin' && 'flex items-center justify-center gap-1'
                   )}>
@@ -478,18 +478,33 @@ export function GamePage() {
                     <input
                       type="text"
                       value={clueWord}
-                      onChange={(e) => setClueWord(e.target.value)}
+                      onChange={(e) => {
+                        // Only allow letters (a-z, A-Z) - no spaces, numbers, or special characters
+                        const value = e.target.value.replace(/[^a-zA-Z]/g, '');
+                        setClueWord(value);
+                      }}
                       placeholder="One-word clue"
                       className="flex-1 px-4 py-3 bg-slate-800 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none uppercase font-medium"
                     />
-                    <input
-                      type="number"
-                      value={clueNumber}
-                      onChange={(e) => setClueNumber(Math.max(1, parseInt(e.target.value) || 1))}
-                      min="1"
-                      max="9"
-                      className="w-20 px-4 py-3 bg-slate-800 border border-white/10 rounded-xl text-white text-center focus:border-blue-500 focus:outline-none font-bold"
-                    />
+                    <div className="flex items-center bg-slate-800 border border-white/10 rounded-xl overflow-hidden">
+                      <button
+                        type="button"
+                        onClick={() => setClueNumber(Math.max(1, clueNumber - 1))}
+                        className="w-10 h-full flex items-center justify-center text-white hover:bg-slate-700 transition-colors cursor-pointer text-xl font-bold"
+                      >
+                        −
+                      </button>
+                      <span className="w-8 text-center text-white font-bold text-lg select-none">
+                        {clueNumber}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setClueNumber(Math.min(9, clueNumber + 1))}
+                        className="w-10 h-full flex items-center justify-center text-white hover:bg-slate-700 transition-colors cursor-pointer text-xl font-bold"
+                      >
+                        +
+                      </button>
+                    </div>
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
@@ -834,17 +849,17 @@ export function GamePage() {
               </div>
 
               {/* Full Board */}
-              <div className="grid grid-cols-5 gap-2">
+              <div className="grid grid-cols-5 gap-1 sm:gap-1.5 md:gap-2">
                 {game.board.map((card) => (
                   <div
                     key={card.id}
                     className={cn(
-                      'aspect-[4/3] rounded-xl font-bold text-sm flex items-center justify-center text-center p-2 border transition-all',
+                      'aspect-[4/3] rounded-lg sm:rounded-xl font-bold text-[9px] sm:text-xs md:text-sm flex items-center justify-center text-center p-0.5 sm:p-1 md:p-2 border transition-all',
                       card.type === 'red' && 'bg-gradient-to-br from-red-500 to-red-600 border-red-400/50',
                       card.type === 'blue' && 'bg-gradient-to-br from-blue-500 to-blue-600 border-blue-400/50',
                       card.type === 'neutral' && 'bg-gradient-to-br from-amber-600 to-amber-700 border-amber-500/50',
                       card.type === 'assassin' && 'bg-gradient-to-br from-slate-800 to-black border-white/30',
-                      card.revealed && 'ring-2 ring-white/50 ring-offset-2 ring-offset-slate-900'
+                      card.revealed && 'ring-2 ring-white/50 ring-offset-1 sm:ring-offset-2 ring-offset-slate-900'
                     )}
                   >
                     <span className="text-white break-words leading-tight">

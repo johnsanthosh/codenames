@@ -4,11 +4,10 @@ import { ref, set, get } from 'firebase/database';
 import { db } from '../lib/firebase';
 import { useAuth } from '../contexts/AuthContext';
 import { generateRoomCode } from '../utils/generateRoomCode';
+import { isAdmin } from '../utils/isAdmin';
 import type { Room } from '../types';
 import { cn } from '../utils/cn';
 import { motion } from 'framer-motion';
-
-const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL || '';
 
 export function HomePage() {
   const { user, signOut } = useAuth();
@@ -18,7 +17,7 @@ export function HomePage() {
   const [isJoining, setIsJoining] = useState(false);
   const [error, setError] = useState('');
 
-  const isAdmin = user?.email === ADMIN_EMAIL;
+  const userIsAdmin = isAdmin(user?.email);
 
   const createRoom = async () => {
     if (!user) return;
@@ -127,7 +126,7 @@ export function HomePage() {
             <h1 className="text-2xl font-bold text-white">CODENAMES</h1>
           </div>
           <div className="flex items-center gap-4">
-            {isAdmin && (
+            {userIsAdmin && (
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -169,11 +168,11 @@ export function HomePage() {
           transition={{ duration: 0.5 }}
           className={cn(
             'grid gap-8',
-            isAdmin ? 'md:grid-cols-2' : 'max-w-md mx-auto'
+            userIsAdmin ? 'md:grid-cols-2' : 'max-w-md mx-auto'
           )}
         >
           {/* Create Room - Admin Only */}
-          {isAdmin && (
+          {userIsAdmin && (
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -221,7 +220,7 @@ export function HomePage() {
 
           {/* Join Room */}
           <motion.div
-            initial={{ opacity: 0, x: isAdmin ? 20 : 0 }}
+            initial={{ opacity: 0, x: userIsAdmin ? 20 : 0 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             className="backdrop-blur-xl bg-white/5 rounded-3xl p-8 border border-white/10 shadow-2xl"

@@ -30,7 +30,9 @@ Step-by-step instructions to set up Firebase for the Codenames multiplayer game.
 5. Select **Start in test mode** (we'll set proper rules later)
 6. Click **Enable**
 
-After creation, click the **Rules** tab and replace the rules with:
+After creation, click the **Rules** tab and replace the rules with one of the following:
+
+### Single Admin
 
 ```json
 {
@@ -45,11 +47,26 @@ After creation, click the **Rules** tab and replace the rules with:
 }
 ```
 
-**Important:** Replace `YOUR_EMAIL@gmail.com` with your actual email address.
+### Multiple Admins
+
+```json
+{
+  "rules": {
+    "rooms": {
+      ".read": "auth != null",
+      "$roomCode": {
+        ".write": "auth != null && (!data.exists() && (auth.token.email == 'admin1@gmail.com' || auth.token.email == 'admin2@gmail.com' || auth.token.email == 'admin3@gmail.com') || data.exists())"
+      }
+    }
+  }
+}
+```
+
+**Important:** Replace the email addresses with your actual admin email addresses.
 
 **What these rules do:**
 - Anyone signed in can **read** all rooms
-- Only **your email** can **create** new rooms
+- Only **admin emails** can **create** new rooms
 - Once a room exists, anyone signed in can **update** it (join, play, etc.)
 
 Click **Publish** to save.
@@ -97,11 +114,15 @@ VITE_FIREBASE_STORAGE_BUCKET=codenames-xxxxx.appspot.com
 VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
 VITE_FIREBASE_APP_ID=1:123456789:web:abcdef...
 
-# Your email - only you can create games
+# Admin emails - these users can create games and access admin dashboard
+# For single admin:
 VITE_ADMIN_EMAIL=your_email@gmail.com
+
+# For multiple admins (comma-separated):
+VITE_ADMIN_EMAILS=admin1@gmail.com,admin2@gmail.com,admin3@gmail.com
 ```
 
-**Important:** The `VITE_ADMIN_EMAIL` must match the email in your Firebase Database Rules.
+**Important:** The admin emails must match the emails in your Firebase Database Rules.
 
 ## Step 6: Run the App
 

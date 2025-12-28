@@ -4,9 +4,8 @@ import { ref, onValue, remove, update } from 'firebase/database';
 import { db } from '../lib/firebase';
 import { useAuth } from '../contexts/AuthContext';
 import { cn } from '../utils/cn';
+import { isAdmin } from '../utils/isAdmin';
 import type { Room, Player } from '../types';
-
-const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL || '';
 
 export function AdminPage() {
   const { user } = useAuth();
@@ -15,10 +14,10 @@ export function AdminPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
 
-  const isAdmin = user?.email === ADMIN_EMAIL;
+  const userIsAdmin = isAdmin(user?.email);
 
   useEffect(() => {
-    if (!isAdmin) {
+    if (!userIsAdmin) {
       navigate('/');
       return;
     }
@@ -34,7 +33,7 @@ export function AdminPage() {
     });
 
     return () => unsubscribe();
-  }, [isAdmin, navigate]);
+  }, [userIsAdmin, navigate]);
 
   const deleteRoom = async (roomCode: string) => {
     if (!confirm(`Delete room ${roomCode}? This cannot be undone.`)) return;
@@ -108,7 +107,7 @@ export function AdminPage() {
     }
   };
 
-  if (!isAdmin) {
+  if (!userIsAdmin) {
     return null;
   }
 

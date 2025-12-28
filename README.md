@@ -25,7 +25,7 @@ Online multiplayer Codenames game built with React, TypeScript, Firebase, and Ta
 - **Real-time multiplayer** - Play with friends in real-time using Firebase
 - **Google Sign-In** - Secure authentication with Google accounts
 - **Private rooms** - Create rooms and share codes with friends
-- **Admin controls** - Only admin can create games; full admin dashboard
+- **Admin controls** - Only admins can create games; full admin dashboard (supports multiple admins)
 - **Team-based gameplay** - Red vs Blue teams with Spymasters and Operatives
 - **Turn-based clues** - Spymasters give clues, operatives guess
 - **Win conditions** - Find all words or make opponent hit the assassin
@@ -86,11 +86,14 @@ VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
 VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 VITE_FIREBASE_APP_ID=your_app_id
 
-# Admin email - only this user can create games
+# Admin email(s) - these users can create games and access admin dashboard
+# Single admin:
 VITE_ADMIN_EMAIL=your_email@gmail.com
+# Multiple admins (comma-separated):
+VITE_ADMIN_EMAILS=admin1@gmail.com,admin2@gmail.com
 ```
 
-> **Note:** The admin email must also be set in your Firebase Database Rules. See [SETUP.md](./SETUP.md) for details.
+> **Note:** The admin emails must also be set in your Firebase Database Rules. See [SETUP.md](./SETUP.md) for details.
 
 ### Development
 
