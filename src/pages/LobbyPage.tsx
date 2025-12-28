@@ -6,6 +6,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { generateBoard, getRandomStartingTeam } from '../utils/generateBoard';
 import { cn } from '../utils/cn';
 import { motion } from 'framer-motion';
+import { isAdmin } from '../utils/isAdmin';
 import type { Room, Team, Role, GameState } from '../types';
 
 export function LobbyPage() {
@@ -40,6 +41,8 @@ export function LobbyPage() {
 
   const currentPlayer = room?.players?.[user?.uid || ''];
   const isHost = room?.createdBy === user?.uid;
+  const userIsAdmin = isAdmin(user?.email);
+  const canStartGame = isHost || userIsAdmin;
 
   const joinTeam = async (team: Team) => {
     if (!roomCode || !user || !room) return;
@@ -413,7 +416,7 @@ export function LobbyPage() {
           transition={{ delay: 0.3 }}
           className="text-center"
         >
-          {isHost && (
+          {canStartGame && (
             <>
               <motion.button
                 whileHover={{ scale: 1.02 }}
@@ -448,7 +451,7 @@ export function LobbyPage() {
             </>
           )}
 
-          {!isHost && (
+          {!canStartGame && (
             <div className="backdrop-blur-xl bg-white/5 rounded-2xl px-8 py-6 inline-block border border-white/10">
               <p className="text-slate-300 flex items-center gap-2">
                 <motion.span
